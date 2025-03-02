@@ -1,0 +1,82 @@
+services:
+  weba:
+    image: gilbertg01/practica-6-h2:latest
+    env_file:
+      - .env
+    environment:
+      - NOMBRE_APP=$AMBIENTE
+      - server.port=8080
+    expose:
+      - 8080
+    restart: always
+    networks:
+      - red-app
+    depends_on:
+      - practica-6-db
+
+  webb:
+    image: gilbertg01/practica-6-h2:latest
+    env_file:
+      - .env
+    environment:
+      - NOMBRE_APP=$AMBIENTE
+      - server.port=8081
+    expose:
+      - 8081
+    restart: always
+    networks:
+      - red-app
+    depends_on:
+      - practica-6-db
+
+  webc:
+    image: gilbertg01/practica-6-h2:latest
+    env_file:
+      - .env
+    environment:
+      - NOMBRE_APP=$AMBIENTE
+      - server.port=8082
+    expose:
+      - 8082
+    restart: always
+    networks:
+      - red-app
+    depends_on:
+      - practica-6-db
+
+  practica-6-db:
+    image: oscarfonts/h2:alpine
+    env_file:
+      - .env
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    volumes:
+      - h2-data:/h2-data
+    environment:
+      H2_OPTIONS: "-tcp -tcpAllowOthers -tcpPort 9092 -ifNotExists"
+    networks:
+      - red-app
+
+  haproxy:
+    environment:
+      - CERT1=lb.futblog.me
+      - EMAIL=gjgg0001@ce.pucmm.edu.do
+      - STAGING=false
+    volumes:
+      - ./haproxy/haproxy.cfg:/etc/haproxy/haproxy.cfg
+    links:
+      - weba
+      - webb
+      - webc
+    networks:
+      - red-app
+    ports:
+      - '80:80'
+      - '443:443'
+    image: 'ghcr.io/tomdess/docker-haproxy-certbot:master'
+
+networks:
+  red-app:
+
+volumes:
+  h2-data:
