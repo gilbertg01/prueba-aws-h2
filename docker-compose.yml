@@ -1,6 +1,6 @@
 services:
   weba:
-    image: gilbertg01/practica-6-h2:latest
+    image: gilbertg01/practica-6-h2-web:latest
     env_file:
       - .env
     environment:
@@ -15,7 +15,7 @@ services:
       - practica-6-db
 
   webb:
-    image: gilbertg01/practica-6-h2:latest
+    image: gilbertg01/practica-6-h2-web:latest
     env_file:
       - .env
     environment:
@@ -30,7 +30,7 @@ services:
       - practica-6-db
 
   webc:
-    image: gilbertg01/practica-6-h2:latest
+    image: gilbertg01/practica-6-h2-web:latest
     env_file:
       - .env
     environment:
